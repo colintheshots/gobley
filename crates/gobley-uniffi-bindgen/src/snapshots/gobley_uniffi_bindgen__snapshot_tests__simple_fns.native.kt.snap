@@ -1179,6 +1179,10 @@ internal typealias UniffiForeignFutureCompleteVoid = simple_fns.cinterop.UniffiF
 
 
 
+
+
+
+
 internal object UniffiLib {
     init {
     }
@@ -1202,6 +1206,16 @@ internal object UniffiLib {
     fun uniffi_simple_fns_fn_func_get_string(
         uniffiCallStatus: UniffiRustCallStatus,
     ): RustBufferByValue = simple_fns.cinterop.uniffi_simple_fns_fn_func_get_string(
+        uniffiCallStatus,
+    )
+    fun uniffi_simple_fns_fn_func_get_u16(
+        uniffiCallStatus: UniffiRustCallStatus,
+    ): Short = simple_fns.cinterop.uniffi_simple_fns_fn_func_get_u16(
+        uniffiCallStatus,
+    )
+    fun uniffi_simple_fns_fn_func_get_u8(
+        uniffiCallStatus: UniffiRustCallStatus,
+    ): Byte = simple_fns.cinterop.uniffi_simple_fns_fn_func_get_u8(
         uniffiCallStatus,
     )
     fun uniffi_simple_fns_fn_func_identity_bool(
@@ -1562,6 +1576,12 @@ internal object UniffiLib {
     fun uniffi_simple_fns_checksum_func_get_string(
     ): Short = simple_fns.cinterop.uniffi_simple_fns_checksum_func_get_string(
     )
+    fun uniffi_simple_fns_checksum_func_get_u16(
+    ): Short = simple_fns.cinterop.uniffi_simple_fns_checksum_func_get_u16(
+    )
+    fun uniffi_simple_fns_checksum_func_get_u8(
+    ): Short = simple_fns.cinterop.uniffi_simple_fns_checksum_func_get_u8(
+    )
     fun uniffi_simple_fns_checksum_func_identity_bool(
     ): Short = simple_fns.cinterop.uniffi_simple_fns_checksum_func_identity_bool(
     )
@@ -1577,6 +1597,56 @@ public fun uniffiEnsureInitialized() {
 
 // Public interface members begin here.
 
+
+
+public object FfiConverterUByte: FfiConverter<UByte, Byte> {
+    override fun lift(value: Byte): UByte {
+        return value.toUByte()
+    }
+
+    public fun lift(value: Int): UByte {
+        return value.toUByte()
+    }
+
+    override fun read(buf: ByteBuffer): UByte {
+        return lift(buf.get())
+    }
+
+    override fun lower(value: UByte): Byte {
+        return value.toByte()
+    }
+
+    override fun allocationSize(value: UByte): ULong = 1UL
+
+    override fun write(value: UByte, buf: ByteBuffer) {
+        buf.put(value.toByte())
+    }
+}
+
+
+public object FfiConverterUShort: FfiConverter<UShort, Short> {
+    override fun lift(value: Short): UShort {
+        return value.toUShort()
+    }
+
+    public fun lift(value: Int): UShort {
+        return value.toUShort()
+    }
+
+    override fun read(buf: ByteBuffer): UShort {
+        return lift(buf.getShort())
+    }
+
+    override fun lower(value: UShort): Short {
+        return value.toShort()
+    }
+
+    override fun allocationSize(value: UShort): ULong = 2UL
+
+    override fun write(value: UShort, buf: ByteBuffer) {
+        buf.putShort(value.toShort())
+    }
+}
 
 
 public object FfiConverterUInt: FfiConverter<UInt, Int> {
@@ -1708,6 +1778,22 @@ public actual fun `echoBytes`(`value`: kotlin.ByteArray): kotlin.ByteArray {
 public actual fun `getString`(): kotlin.String {
     return FfiConverterString.lift(uniffiRustCall { uniffiRustCallStatus ->
         UniffiLib.uniffi_simple_fns_fn_func_get_string(
+            uniffiRustCallStatus,
+        )
+    })
+}
+
+public actual fun `getU16`(): kotlin.UShort {
+    return FfiConverterUShort.lift(uniffiRustCall { uniffiRustCallStatus ->
+        UniffiLib.uniffi_simple_fns_fn_func_get_u16(
+            uniffiRustCallStatus,
+        )
+    })
+}
+
+public actual fun `getU8`(): kotlin.UByte {
+    return FfiConverterUByte.lift(uniffiRustCall { uniffiRustCallStatus ->
+        UniffiLib.uniffi_simple_fns_fn_func_get_u8(
             uniffiRustCallStatus,
         )
     })

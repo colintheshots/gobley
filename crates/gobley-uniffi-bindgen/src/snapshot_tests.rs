@@ -83,6 +83,8 @@ fn snapshot_simple_functions() {
     let udl = r#"
 namespace simple_fns {
     string get_string();
+    u8 get_u8();
+    u16 get_u16();
     u32 add(u32 a, u32 b);
     boolean identity_bool(boolean value);
     bytes echo_bytes(bytes value);

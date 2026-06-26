@@ -152,6 +152,12 @@ RustBuffer uniffi_simple_fns_fn_func_echo_bytes(RustBuffer value, UniffiRustCall
 RustBuffer uniffi_simple_fns_fn_func_get_string(UniffiRustCallStatus *_Nonnull out_status
     
 );
+int16_t uniffi_simple_fns_fn_func_get_u16(UniffiRustCallStatus *_Nonnull out_status
+    
+);
+int8_t uniffi_simple_fns_fn_func_get_u8(UniffiRustCallStatus *_Nonnull out_status
+    
+);
 int8_t uniffi_simple_fns_fn_func_identity_bool(int8_t value, UniffiRustCallStatus *_Nonnull out_status
 );
 RustBuffer ffi_simple_fns_rustbuffer_alloc(int64_t size, UniffiRustCallStatus *_Nonnull out_status
@@ -265,6 +271,12 @@ int16_t uniffi_simple_fns_checksum_func_echo_bytes(void
     
 );
 int16_t uniffi_simple_fns_checksum_func_get_string(void
+    
+);
+int16_t uniffi_simple_fns_checksum_func_get_u16(void
+    
+);
+int16_t uniffi_simple_fns_checksum_func_get_u8(void
     
 );
 int16_t uniffi_simple_fns_checksum_func_identity_bool(void

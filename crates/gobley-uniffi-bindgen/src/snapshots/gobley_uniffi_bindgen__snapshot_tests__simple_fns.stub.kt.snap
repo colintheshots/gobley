@@ -20,6 +20,10 @@ package uniffi.simple_fns
 
 
 
+
+
+
+
 public actual fun `add`(`a`: kotlin.UInt, `b`: kotlin.UInt): kotlin.UInt {
     TODO()
 }
@@ -29,6 +33,14 @@ public actual fun `echoBytes`(`value`: kotlin.ByteArray): kotlin.ByteArray {
 }
 
 public actual fun `getString`(): kotlin.String {
+    TODO()
+}
+
+public actual fun `getU16`(): kotlin.UShort {
+    TODO()
+}
+
+public actual fun `getU8`(): kotlin.UByte {
     TODO()
 }
 

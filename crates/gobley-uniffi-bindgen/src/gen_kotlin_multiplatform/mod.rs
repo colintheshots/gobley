@@ -690,6 +690,19 @@ impl KotlinCodeOracle {
         }
     }
 
+    /// Kotlin/JNA direct mapping can mis-handle unsigned 8/16-bit direct return values
+    /// on some runtimes, so widen the raw carrier to Int and lift it back into UByte/UShort.
+    fn ffi_type_label_for_direct_return(
+        &self,
+        ffi_type: &FfiType,
+        ci: &ComponentInterface,
+    ) -> String {
+        match ffi_type {
+            FfiType::UInt8 | FfiType::UInt16 => "Int".to_string(),
+            _ => self.ffi_type_label_by_value(ffi_type, ci),
+        }
+    }
+
     /// FFI type name to use inside structs
     ///
     /// The main requirement here is that all types must have default values or else the struct
@@ -1314,6 +1327,13 @@ mod filters {
         ci: &ComponentInterface,
     ) -> Result<String, askama::Error> {
         Ok(KotlinCodeOracle.ffi_type_label_for_ffi_struct(type_, ci))
+    }
+
+    pub fn ffi_type_name_for_direct_return(
+        type_: &FfiType,
+        ci: &ComponentInterface,
+    ) -> Result<String, askama::Error> {
+        Ok(KotlinCodeOracle.ffi_type_label_for_direct_return(type_, ci))
     }
 
     pub fn ffi_default_value(type_: FfiType) -> Result<String, askama::Error> {

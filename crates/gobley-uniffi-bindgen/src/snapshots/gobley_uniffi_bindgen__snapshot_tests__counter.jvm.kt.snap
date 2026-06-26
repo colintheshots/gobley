@@ -977,19 +977,19 @@ internal object IntegrityCheckingUniffiLib : Library {
         }
     }
     private fun uniffiCheckApiChecksums() {
-        if (uniffi_counter_checksum_func_make_counter() != 28244.toShort()) {
+        if (uniffi_counter_checksum_func_make_counter() != 28244) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
-        if (uniffi_counter_checksum_method_counter_clone_counter() != 35341.toShort()) {
+        if (uniffi_counter_checksum_method_counter_clone_counter() != 35341) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
-        if (uniffi_counter_checksum_method_counter_increment() != 63205.toShort()) {
+        if (uniffi_counter_checksum_method_counter_increment() != 63205) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
-        if (uniffi_counter_checksum_method_counter_value() != 24182.toShort()) {
+        if (uniffi_counter_checksum_method_counter_value() != 24182) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
-        if (uniffi_counter_checksum_constructor_counter_new() != 48044.toShort()) {
+        if (uniffi_counter_checksum_constructor_counter_new() != 48044) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
     }
@@ -997,19 +997,19 @@ internal object IntegrityCheckingUniffiLib : Library {
     // Integrity check functions only
     @JvmStatic
     external fun uniffi_counter_checksum_func_make_counter(
-    ): Short
+    ): Int
     @JvmStatic
     external fun uniffi_counter_checksum_method_counter_clone_counter(
-    ): Short
+    ): Int
     @JvmStatic
     external fun uniffi_counter_checksum_method_counter_increment(
-    ): Short
+    ): Int
     @JvmStatic
     external fun uniffi_counter_checksum_method_counter_value(
-    ): Short
+    ): Int
     @JvmStatic
     external fun uniffi_counter_checksum_constructor_counter_new(
-    ): Short
+    ): Int
     @JvmStatic
     external fun ffi_counter_uniffi_contract_version(
     ): Int
@@ -1102,7 +1102,7 @@ internal object UniffiLib : Library {
     external fun ffi_counter_rust_future_complete_u8(
         `handle`: Long,
         uniffiCallStatus: UniffiRustCallStatus,
-    ): Byte
+    ): Int
     @JvmStatic
     external fun ffi_counter_rust_future_poll_i8(
         `handle`: Long,
@@ -1140,7 +1140,7 @@ internal object UniffiLib : Library {
     external fun ffi_counter_rust_future_complete_u16(
         `handle`: Long,
         uniffiCallStatus: UniffiRustCallStatus,
-    ): Short
+    ): Int
     @JvmStatic
     external fun ffi_counter_rust_future_poll_i16(
         `handle`: Long,

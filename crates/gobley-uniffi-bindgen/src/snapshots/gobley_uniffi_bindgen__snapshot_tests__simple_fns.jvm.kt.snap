@@ -934,6 +934,10 @@ internal interface UniffiForeignFutureCompleteVoid: com.sun.jna.Callback {
 
 
 
+
+
+
+
 @Synchronized
 private fun findLibraryName(componentName: String): String {
     val libOverride = System.getProperty("uniffi.component.$componentName.libraryOverride")
@@ -973,16 +977,22 @@ internal object IntegrityCheckingUniffiLib : Library {
         }
     }
     private fun uniffiCheckApiChecksums() {
-        if (uniffi_simple_fns_checksum_func_add() != 55457.toShort()) {
+        if (uniffi_simple_fns_checksum_func_add() != 55457) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
-        if (uniffi_simple_fns_checksum_func_echo_bytes() != 50974.toShort()) {
+        if (uniffi_simple_fns_checksum_func_echo_bytes() != 50974) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
-        if (uniffi_simple_fns_checksum_func_get_string() != 20849.toShort()) {
+        if (uniffi_simple_fns_checksum_func_get_string() != 20849) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
-        if (uniffi_simple_fns_checksum_func_identity_bool() != 14353.toShort()) {
+        if (uniffi_simple_fns_checksum_func_get_u16() != 11242) {
+            throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+        }
+        if (uniffi_simple_fns_checksum_func_get_u8() != 45933) {
+            throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+        }
+        if (uniffi_simple_fns_checksum_func_identity_bool() != 14353) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
     }
@@ -990,16 +1000,22 @@ internal object IntegrityCheckingUniffiLib : Library {
     // Integrity check functions only
     @JvmStatic
     external fun uniffi_simple_fns_checksum_func_add(
-    ): Short
+    ): Int
     @JvmStatic
     external fun uniffi_simple_fns_checksum_func_echo_bytes(
-    ): Short
+    ): Int
     @JvmStatic
     external fun uniffi_simple_fns_checksum_func_get_string(
-    ): Short
+    ): Int
+    @JvmStatic
+    external fun uniffi_simple_fns_checksum_func_get_u16(
+    ): Int
+    @JvmStatic
+    external fun uniffi_simple_fns_checksum_func_get_u8(
+    ): Int
     @JvmStatic
     external fun uniffi_simple_fns_checksum_func_identity_bool(
-    ): Short
+    ): Int
     @JvmStatic
     external fun ffi_simple_fns_uniffi_contract_version(
     ): Int
@@ -1029,6 +1045,14 @@ internal object UniffiLib : Library {
     external fun uniffi_simple_fns_fn_func_get_string(
         uniffiCallStatus: UniffiRustCallStatus,
     ): RustBufferByValue
+    @JvmStatic
+    external fun uniffi_simple_fns_fn_func_get_u16(
+        uniffiCallStatus: UniffiRustCallStatus,
+    ): Int
+    @JvmStatic
+    external fun uniffi_simple_fns_fn_func_get_u8(
+        uniffiCallStatus: UniffiRustCallStatus,
+    ): Int
     @JvmStatic
     external fun uniffi_simple_fns_fn_func_identity_bool(
         `value`: Byte,
@@ -1073,7 +1097,7 @@ internal object UniffiLib : Library {
     external fun ffi_simple_fns_rust_future_complete_u8(
         `handle`: Long,
         uniffiCallStatus: UniffiRustCallStatus,
-    ): Byte
+    ): Int
     @JvmStatic
     external fun ffi_simple_fns_rust_future_poll_i8(
         `handle`: Long,
@@ -1111,7 +1135,7 @@ internal object UniffiLib : Library {
     external fun ffi_simple_fns_rust_future_complete_u16(
         `handle`: Long,
         uniffiCallStatus: UniffiRustCallStatus,
-    ): Short
+    ): Int
     @JvmStatic
     external fun ffi_simple_fns_rust_future_poll_i16(
         `handle`: Long,
@@ -1293,6 +1317,56 @@ public fun uniffiEnsureInitialized() {
 
 
 
+public object FfiConverterUByte: FfiConverter<UByte, Byte> {
+    override fun lift(value: Byte): UByte {
+        return value.toUByte()
+    }
+
+    public fun lift(value: Int): UByte {
+        return value.toUByte()
+    }
+
+    override fun read(buf: ByteBuffer): UByte {
+        return lift(buf.get())
+    }
+
+    override fun lower(value: UByte): Byte {
+        return value.toByte()
+    }
+
+    override fun allocationSize(value: UByte): ULong = 1UL
+
+    override fun write(value: UByte, buf: ByteBuffer) {
+        buf.put(value.toByte())
+    }
+}
+
+
+public object FfiConverterUShort: FfiConverter<UShort, Short> {
+    override fun lift(value: Short): UShort {
+        return value.toUShort()
+    }
+
+    public fun lift(value: Int): UShort {
+        return value.toUShort()
+    }
+
+    override fun read(buf: ByteBuffer): UShort {
+        return lift(buf.getShort())
+    }
+
+    override fun lower(value: UShort): Short {
+        return value.toShort()
+    }
+
+    override fun allocationSize(value: UShort): ULong = 2UL
+
+    override fun write(value: UShort, buf: ByteBuffer) {
+        buf.putShort(value.toShort())
+    }
+}
+
+
 public object FfiConverterUInt: FfiConverter<UInt, Int> {
     override fun lift(value: Int): UInt {
         return value.toUInt()
@@ -1422,6 +1496,22 @@ public actual fun `echoBytes`(`value`: kotlin.ByteArray): kotlin.ByteArray {
 public actual fun `getString`(): kotlin.String {
     return FfiConverterString.lift(uniffiRustCall { uniffiRustCallStatus ->
         UniffiLib.uniffi_simple_fns_fn_func_get_string(
+            uniffiRustCallStatus,
+        )
+    })
+}
+
+public actual fun `getU16`(): kotlin.UShort {
+    return FfiConverterUShort.lift(uniffiRustCall { uniffiRustCallStatus ->
+        UniffiLib.uniffi_simple_fns_fn_func_get_u16(
+            uniffiRustCallStatus,
+        )
+    })
+}
+
+public actual fun `getU8`(): kotlin.UByte {
+    return FfiConverterUByte.lift(uniffiRustCall { uniffiRustCallStatus ->
+        UniffiLib.uniffi_simple_fns_fn_func_get_u8(
             uniffiRustCallStatus,
         )
     })

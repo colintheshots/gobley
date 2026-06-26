@@ -105,10 +105,18 @@ public object NoPointer
 
 
 
+
+
+
+
 public expect fun `add`(`a`: kotlin.UInt, `b`: kotlin.UInt): kotlin.UInt
 
 public expect fun `echoBytes`(`value`: kotlin.ByteArray): kotlin.ByteArray
 
 public expect fun `getString`(): kotlin.String
+
+public expect fun `getU16`(): kotlin.UShort
+
+public expect fun `getU8`(): kotlin.UByte
 
 public expect fun `identityBool`(`value`: kotlin.Boolean): kotlin.Boolean

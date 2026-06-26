@@ -967,7 +967,7 @@ internal object IntegrityCheckingUniffiLib : Library {
         }
     }
     private fun uniffiCheckApiChecksums() {
-        if (uniffi_errors_checksum_func_checked_add() != 46803.toShort()) {
+        if (uniffi_errors_checksum_func_checked_add() != 46803) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
     }
@@ -975,7 +975,7 @@ internal object IntegrityCheckingUniffiLib : Library {
     // Integrity check functions only
     @JvmStatic
     external fun uniffi_errors_checksum_func_checked_add(
-    ): Short
+    ): Int
     @JvmStatic
     external fun ffi_errors_uniffi_contract_version(
     ): Int
@@ -1035,7 +1035,7 @@ internal object UniffiLib : Library {
     external fun ffi_errors_rust_future_complete_u8(
         `handle`: Long,
         uniffiCallStatus: UniffiRustCallStatus,
-    ): Byte
+    ): Int
     @JvmStatic
     external fun ffi_errors_rust_future_poll_i8(
         `handle`: Long,
@@ -1073,7 +1073,7 @@ internal object UniffiLib : Library {
     external fun ffi_errors_rust_future_complete_u16(
         `handle`: Long,
         uniffiCallStatus: UniffiRustCallStatus,
-    ): Short
+    ): Int
     @JvmStatic
     external fun ffi_errors_rust_future_poll_i16(
         `handle`: Long,

@@ -967,7 +967,7 @@ internal object IntegrityCheckingUniffiLib : Library {
         }
     }
     private fun uniffiCheckApiChecksums() {
-        if (uniffi_enums_checksum_func_default_shape() != 32995.toShort()) {
+        if (uniffi_enums_checksum_func_default_shape() != 32995) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
     }
@@ -975,7 +975,7 @@ internal object IntegrityCheckingUniffiLib : Library {
     // Integrity check functions only
     @JvmStatic
     external fun uniffi_enums_checksum_func_default_shape(
-    ): Short
+    ): Int
     @JvmStatic
     external fun ffi_enums_uniffi_contract_version(
     ): Int
@@ -1033,7 +1033,7 @@ internal object UniffiLib : Library {
     external fun ffi_enums_rust_future_complete_u8(
         `handle`: Long,
         uniffiCallStatus: UniffiRustCallStatus,
-    ): Byte
+    ): Int
     @JvmStatic
     external fun ffi_enums_rust_future_poll_i8(
         `handle`: Long,
@@ -1071,7 +1071,7 @@ internal object UniffiLib : Library {
     external fun ffi_enums_rust_future_complete_u16(
         `handle`: Long,
         uniffiCallStatus: UniffiRustCallStatus,
-    ): Short
+    ): Int
     @JvmStatic
     external fun ffi_enums_rust_future_poll_i16(
         `handle`: Long,
