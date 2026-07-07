@@ -173,3 +173,62 @@ enum ArithmeticError {
     let bindings = render_all_targets("errors", udl);
     assert_all_target_snapshots("errors", &bindings);
 }
+
+#[test]
+fn snapshot_callback_interface() {
+    // Exercises the foreign callback interface machinery (vtable, lift/lower of callbacks).
+    let udl = r#"
+namespace callbacks {
+    void register_logger(Logger logger);
+    boolean invoke_logger(Logger logger, string message);
+};
+
+callback interface Logger {
+    void log(string message);
+    boolean is_enabled();
+};
+"#;
+    let bindings = render_all_targets("callbacks", udl);
+    assert_all_target_snapshots("callbacks", &bindings);
+}
+
+#[test]
+fn snapshot_trait_interface() {
+    // Exercises `[Trait, WithForeign]` interfaces, which can be implemented by both Rust and
+    // foreign code and drive the trait/callback vtable generation changed in UniFFI 0.30/0.31.
+    let udl = r#"
+namespace traits {
+    Greeter make_greeter();
+    string greet_with(Greeter greeter, string name);
+};
+
+[Trait, WithForeign]
+interface Greeter {
+    string greeting(string name);
+    u32 call_count();
+};
+"#;
+    let bindings = render_all_targets("traits", udl);
+    assert_all_target_snapshots("traits", &bindings);
+}
+
+#[test]
+fn snapshot_async_functions() {
+    // Exercises async free functions and async methods, including the future FFI scaffolding.
+    let udl = r#"
+namespace async_fns {
+    [Async]
+    string fetch(string url);
+};
+
+interface AsyncResource {
+    constructor();
+    [Async]
+    string load(u32 id);
+    [Async]
+    void refresh();
+};
+"#;
+    let bindings = render_all_targets("async_fns", udl);
+    assert_all_target_snapshots("async_fns", &bindings);
+}

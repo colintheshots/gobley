@@ -56,7 +56,7 @@ trait CodeType: Debug {
     /// with this type only.
     fn canonical_name(&self) -> String;
 
-    /// Default for named types is to assume a constructor exists.
+    /// Renders the default value for a field or argument of this type.
     fn default(
         &self,
         default: &DefaultValue,
@@ -65,7 +65,19 @@ trait CodeType: Debug {
     ) -> Result<String> {
         let _ = config;
         match default {
-            DefaultValue::Default => Ok(format!("{}()", self.type_label(ci))),
+            // A bare `#[uniffi(default)]` (no explicit value) asks the binding to synthesize the
+            // type's default. For most named types (objects/interfaces, custom types, callback
+            // interfaces) there is no public no-argument constructor that reconstructs the
+            // Rust-side default, so emitting `TypeName()` would silently produce Kotlin that fails
+            // to compile later. Fail fast here instead. Types that *can* be default-constructed
+            // (primitives, optionals, sequences, maps, and all-defaulted records) override this.
+            DefaultValue::Default => bail!(
+                "`#[uniffi(default)]` without an explicit value is not supported for type `{}`. \
+                 Only primitives, optionals, sequences, maps, and records whose fields all have \
+                 defaults can be default-constructed in the generated bindings; provide an \
+                 explicit default value instead.",
+                self.type_label(ci)
+            ),
             DefaultValue::Literal(_) => bail!(
                 "Literals for named types are not supported: {}",
                 self.type_label(ci)
