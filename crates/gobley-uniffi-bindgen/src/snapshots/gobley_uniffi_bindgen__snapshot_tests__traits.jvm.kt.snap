@@ -1025,16 +1025,17 @@ internal object IntegrityCheckingUniffiLib : Library {
         }
     }
     private fun uniffiCheckApiChecksums() {
-        if (uniffi_traits_checksum_func_greet_with() != 57529) {
+        // Checksum exports use a 16-bit C ABI. Ignore sign extension or undefined upper register bits.
+        if ((uniffi_traits_checksum_func_greet_with() and 0xffff) != 57529) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
-        if (uniffi_traits_checksum_func_make_greeter() != 28590) {
+        if ((uniffi_traits_checksum_func_make_greeter() and 0xffff) != 28590) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
-        if (uniffi_traits_checksum_method_greeter_call_count() != 49714) {
+        if ((uniffi_traits_checksum_method_greeter_call_count() and 0xffff) != 49714) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
-        if (uniffi_traits_checksum_method_greeter_greeting() != 43510) {
+        if ((uniffi_traits_checksum_method_greeter_greeting() and 0xffff) != 43510) {
             throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
         }
     }
